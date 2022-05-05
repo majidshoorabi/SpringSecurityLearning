@@ -157,3 +157,9 @@ buildNumber.properties
 .classpath
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,maven,java
+
+Security.iml
+mvnw
+mvnw.cmd
+.mvn
+.idea
