@@ -2,6 +2,7 @@ package com.github.majidshoorabi.security.user;
 
 import com.github.majidshoorabi.security.user.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/admin")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String adminPage(Model model) {
         model.addAttribute("users", userService.findAll());
         return "admin";
