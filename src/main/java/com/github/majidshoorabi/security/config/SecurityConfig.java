@@ -32,7 +32,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/login","/h2").permitAll()     // pages that don't need to authentication - you must add your login page here
+                .antMatchers("/", "/login", "/h2").permitAll()     // pages that don't need to authentication - you must add your login page here
+
+                // Authorization
+                .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")    // introduce your login page
@@ -58,11 +63,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     /**
-     *  For custom in memoryAuthentication you need a passwordEncoder
+     * For custom in memoryAuthentication you need a passwordEncoder
+     *
      * @return
      */
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();       // Password is plain text
     }
 }
