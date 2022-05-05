@@ -2,6 +2,7 @@ package com.github.majidshoorabi.security.user;
 
 import com.github.majidshoorabi.security.user.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +40,7 @@ public class UserController {
 
 
     @GetMapping("/user/get/{id}")
+    @PostAuthorize("returnObject.email == authentication.name")
     public @ResponseBody User getUser(@PathVariable("id") Long id) {
         return userService.findById(id);
     }
