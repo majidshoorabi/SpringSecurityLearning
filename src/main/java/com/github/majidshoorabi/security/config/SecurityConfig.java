@@ -1,5 +1,6 @@
 package com.github.majidshoorabi.security.config;
 
+import com.github.majidshoorabi.security.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,15 +25,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/login").permitAll()     // pages that don't need to authentication - you must add your login page here
+                .antMatchers("/", "/login","/h2").permitAll()     // pages that don't need to authentication - you must add your login page here
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")    // introduce your login page
                 .usernameParameter("email");        // change login username parameter
+
+
+        // for display h2 console you should add this two lines
+        http.headers().frameOptions().disable();
+        // http.csrf().disable(); this added in above configuration
     }
 
 
@@ -44,10 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(this.dataSource)
-                .usersByUsernameQuery("SELECT email, password, enabled FROM users WHERE email=?")       // Because we change some default column names and table names we should write custom queries
-                .authoritiesByUsernameQuery("SELECT email, authority FROM authorities WHERE email=?");
+        auth.userDetailsService(this.userService);
     }
 
 
