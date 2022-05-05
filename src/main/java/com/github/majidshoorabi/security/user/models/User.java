@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author majid.shoorabi
@@ -28,4 +29,7 @@ public class User implements Serializable {
 
     private String email;
     private String password;
+    private Boolean enabled;
+
+//    private Authority authorities;
 }
