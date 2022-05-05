@@ -2,6 +2,7 @@ package com.github.majidshoorabi.security.user;
 
 import com.github.majidshoorabi.security.user.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +36,7 @@ public class UserService implements UserDetailsService {
         return userRepository.getOne(id);
     }
 
+    @PreAuthorize("#user.email != authentication.name")         // user can not delete itself
     public void deleteById(User user) {
         userRepository.deleteById(user.getId());
     }
