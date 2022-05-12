@@ -38,7 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")    // introduce your login page
-                .usernameParameter("email");        // change login username parameter
+                .usernameParameter("email")         // change login username parameter
+                .defaultSuccessUrl("/admin", true);              // after login success go to this url
 
 
         // for display h2 console you should add this two lines
