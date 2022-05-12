@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author majid.shoorabi
@@ -29,11 +30,12 @@ public class User implements Serializable, UserDetails {
     private String password;
     private Boolean enabled = Boolean.TRUE;
 
-    @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "authorities",
-            joinColumns = @JoinColumn(name = "email", referencedColumnName = "email"))
-    @Enumerated(EnumType.STRING)
-    private List<UserRole> authority;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name ="user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
 
     public User() {
     }
@@ -61,7 +63,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authority;
+        return roles.stream().flatMap(role -> role.getAuthorities().stream()).collect(Collectors.toList());
     }
 
     public String getPassword() {
@@ -105,12 +107,11 @@ public class User implements Serializable, UserDetails {
         this.enabled = enabled;
     }
 
-    public List<UserRole> getUserRoles() {
-        return authority;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setUserRoles(List<UserRole> userRoles) {
-        this.authority = userRoles;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
-
 }
