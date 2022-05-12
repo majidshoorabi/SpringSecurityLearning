@@ -5,16 +5,17 @@
     <title>Register User</title>
 </head>
 <body>
+<h3>Register Page</h3>
 <form method="post" th:action="@{/admin/register}" th:object="${user}">
-    <input type="hidden" th:field="*{id}">
+    <input type="hidden" th:field="${user.id}">
     <table>
         <tr>
             <td><label for="email">Email :</label></td>
-            <td><input id="email" th:field="*{email}" type="text"></td>
+            <td><input id="email" th:field="${user.email}" type="text"></td>
         </tr>
         <tr>
             <td><label for="password">Password :</label></td>
-            <td><input id="password" th:field="*{password}" type="password"></td>
+            <td><input id="password" th:field="${user.password}" type="password"></td>
         </tr>
         <tr>
             <td></td>
