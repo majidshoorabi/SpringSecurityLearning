@@ -2,6 +2,15 @@ INSERT INTO users (email, password, enabled)
 VALUES ('foo@gmail.com', '123', true),
        ('bar@email.com', '123', true);
 
-INSERT INTO authorities (email, authority)
-VALUES ('foo@gmail.com', 'ADMIN'),
-       ('bar@email.com', 'USER');
+INSERT INTO roles (name)
+VALUES ('ADMIN'),
+       ('ADMIN 2');
+
+INSERT INTO users_roles(user_id, role_id)
+VALUES (1, 1),
+       (1, 2);
+
+
+INSERT INTO role_authorities(role_id, authorities)
+VALUES (1, 0),
+       (1, 1);
