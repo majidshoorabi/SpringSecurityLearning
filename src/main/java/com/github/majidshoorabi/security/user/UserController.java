@@ -79,4 +79,8 @@ public class UserController {
     }
 
 
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
 }

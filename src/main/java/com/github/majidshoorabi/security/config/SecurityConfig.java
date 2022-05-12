@@ -34,13 +34,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/h2").permitAll()     // pages that don't need to authentication - you must add your login page here
+                .antMatchers("/", "/login", "/h2", "/error").permitAll()     // pages that don't need to authentication - you must add your login page here
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")    // introduce your login page
                 .usernameParameter("email")         // change login username parameter
-                //.defaultSuccessUrl("/admin", true);              // after login success go to this url
-                .successHandler(new SuccessLoginHandler());        // after login redirect to page with this handler
+                // .defaultSuccessUrl("/admin", true);              // after login success go to this url
+                .successHandler(new SuccessLoginHandler())         // after login redirect to page with this handler
+                .and().exceptionHandling()
+                // .accessDeniedHandler()                            // can set handler for forbidden error
+                .accessDeniedPage("/error");                        // set error page fot forbidden error
+                // .and().logout()
+                // .logoutUrl()                                      // set logout url
+                // .getLogoutHandlers();                            // set logout handler
+                // .logoutSuccessUrl()                              // set logout success url
+                // .logoutSuccessHandler()                          // set logout success andler
+
 
 
         // for display h2 console you should add this two lines
