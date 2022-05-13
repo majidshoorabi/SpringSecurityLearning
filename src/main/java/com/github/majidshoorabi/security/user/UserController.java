@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.*;
+
 /**
  * @author majid.shoorabi
  * @created 2022-05-May
@@ -82,5 +84,38 @@ public class UserController {
     @GetMapping("/error")
     public String error() {
         return "error";
+    }
+
+
+    @GetMapping("/getCookie")
+    public String getCookie(HttpServletRequest request) {
+        System.out.println("-----------------");
+        for (Cookie cookie : request.getCookies()) {
+            System.out.println(cookie.getName() + " : " + cookie.getValue());
+        }
+        System.out.println("-----------------");
+        return "index";
+    }
+
+    @GetMapping("/setCookie")
+    public String setCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("user","Majid");
+        cookie.setMaxAge(60);
+        response.addCookie(cookie);
+        return "index";
+    }
+
+    @GetMapping("/getSession")
+    public String getSession(HttpSession session) {
+        System.out.println("-----------------");
+        System.out.println(session.getAttribute("SPRING_SECURITY_CONTEXT"));
+        System.out.println("-----------------");
+        return "index";
+    }
+
+    @GetMapping("/setSession")
+    public String setSession(HttpSession session) {
+        session.setAttribute("user","Majid");
+        return "index";
     }
 }
