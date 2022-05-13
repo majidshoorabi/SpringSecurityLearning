@@ -39,17 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().loginPage("/login")    // introduce your login page
                 .usernameParameter("email")         // change login username parameter
-                // .defaultSuccessUrl("/admin", true);              // after login success go to this url
                 .successHandler(new SuccessLoginHandler())         // after login redirect to page with this handler
                 .and().exceptionHandling()
-                // .accessDeniedHandler()                            // can set handler for forbidden error
-                .accessDeniedPage("/error");                        // set error page fot forbidden error
-                // .and().logout()
-                // .logoutUrl()                                      // set logout url
-                // .getLogoutHandlers();                            // set logout handler
-                // .logoutSuccessUrl()                              // set logout success url
-                // .logoutSuccessHandler()                          // set logout success andler
-
+                .accessDeniedPage("/error")                         // set error page fot forbidden error
+                .and().logout().deleteCookies("remember");
 
 
         // for display h2 console you should add this two lines
