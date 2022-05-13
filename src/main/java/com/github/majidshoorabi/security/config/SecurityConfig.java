@@ -40,6 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().loginPage("/login")    // introduce your login page
                 .usernameParameter("email")         // change login username parameter
                 .successHandler(new SuccessLoginHandler())         // after login redirect to page with this handler
+                .and().rememberMe()
+                //.rememberMeCookieName("custom-name")                // change cookie name
+                //.rememberMeParameter("remember")                    // can change for parameter name
                 .and().exceptionHandling()
                 .accessDeniedPage("/error")                         // set error page fot forbidden error
                 .and().logout().deleteCookies("remember");
