@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.*;
+import java.security.Principal;
 
 /**
  * @author majid.shoorabi
@@ -81,12 +82,6 @@ public class UserController {
     }
 
 
-    @GetMapping("/error")
-    public String error() {
-        return "error";
-    }
-
-
     @GetMapping("/getCookie")
     public String getCookie(HttpServletRequest request) {
         System.out.println("-----------------");
@@ -117,5 +112,11 @@ public class UserController {
     public String setSession(HttpSession session) {
         session.setAttribute("user","Majid");
         return "index";
+    }
+
+    @GetMapping("/info")
+    public @ResponseBody
+    Principal setSession(Principal principal) {
+        return principal;
     }
 }
