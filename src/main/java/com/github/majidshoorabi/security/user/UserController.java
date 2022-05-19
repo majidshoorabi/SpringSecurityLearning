@@ -147,4 +147,10 @@ public class UserController {
         response.addHeader("Authorization", jwtUtils.generateToken(jwtAuth.getUsername()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/jwt/hello")
+    public @ResponseBody
+    String jwtHello() {
+        return "Hello Jwt";
+    }
 }
