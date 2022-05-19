@@ -26,4 +26,12 @@ public class JwtUtils {
                 .compact();
     }
 
+    public String getUsername(String token){
+        return Jwts.parser()
+                .setSigningKey(this.SECRET)      // check jwt is valid
+                .parseClaimsJws(token)           // get data of token from signe token
+                .getBody()
+                .getSubject();                  // get username
+    }
+
 }
