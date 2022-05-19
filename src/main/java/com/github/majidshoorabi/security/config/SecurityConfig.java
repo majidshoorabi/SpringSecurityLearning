@@ -30,6 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private OAuth2UserService oAuth2UserService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -43,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .redirectionEndpoint().baseUri("/login/redirectUrl")  // set custom redirectUrl
                 .and()
+                .userInfoEndpoint().userService(oAuth2UserService).and()
                 .and().rememberMe()
                 .and().exceptionHandling().accessDeniedPage("/error")
                 .and().logout().deleteCookies("remember");

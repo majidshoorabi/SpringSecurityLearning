@@ -3,11 +3,11 @@ package com.github.majidshoorabi.security.user.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "users")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class User implements Serializable, UserDetails {
+public class User implements Serializable, UserDetails, OAuth2User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +30,13 @@ public class User implements Serializable, UserDetails {
     private String password;
     private Boolean enabled = Boolean.TRUE;
 
+    private String name;
+    private String picture;
+
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name ="user_id"),
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<Role> roles;
@@ -62,8 +66,20 @@ public class User implements Serializable, UserDetails {
     }
 
     @Override
+    public Map<String, Object> getAttributes() {
+        return new HashMap<>();
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().flatMap(role -> role.getAuthorities().stream()).collect(Collectors.toList());
+        List<Authority> authorities = new ArrayList<>();
+        if (roles != null)
+            for (Role role : roles) {
+                authorities.addAll(role.getAuthorities());
+            }
+        else
+            authorities.add(Authority.OP_ACCESS_USER);    // Default authorities
+        return authorities;
     }
 
     public String getPassword() {
@@ -113,5 +129,22 @@ public class User implements Serializable, UserDetails {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }
