@@ -23,8 +23,8 @@ CREATE TABLE users
 (
     id       INT AUTO_INCREMENT PRIMARY KEY,
     email    VARCHAR(250) NOT NULL,
-    password VARCHAR(250) NOT NULL,
-    enabled  BOOLEAN      NOT NULL,
+    password VARCHAR(250),
+    enabled  BOOLEAN,
     name     VARCHAR(250),
     picture  VARCHAR(500)
 );
