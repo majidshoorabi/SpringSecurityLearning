@@ -46,7 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .redirectionEndpoint().baseUri("/login/redirectUrl")  // set custom redirectUrl
                 .and()
-                .userInfoEndpoint().userService(oAuth2UserService).and()
+                .userInfoEndpoint().userService(oAuth2UserService)
+                .and().successHandler(new SuccessLoginHandler())      // set handler for login through Oauth2 - can have new handler or use from handler's login form
                 .and().rememberMe()
                 .and().exceptionHandling().accessDeniedPage("/error")
                 .and().logout().deleteCookies("remember");
