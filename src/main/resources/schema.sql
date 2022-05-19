@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS roles_authorities;
 
 CREATE TABLE role_authorities
 (
-    role_id        INT NOT NULL,
+    role_id     INT NOT NULL,
     authorities INT NOT NULL,
     constraint fk_authorities_roles FOREIGN key (role_id) REFERENCES roles (id)
 );
@@ -24,7 +24,9 @@ CREATE TABLE users
     id       INT AUTO_INCREMENT PRIMARY KEY,
     email    VARCHAR(250) NOT NULL,
     password VARCHAR(250) NOT NULL,
-    enabled  BOOLEAN      NOT NULL
+    enabled  BOOLEAN      NOT NULL,
+    name     VARCHAR(250),
+    picture  VARCHAR(500)
 );
 
 
