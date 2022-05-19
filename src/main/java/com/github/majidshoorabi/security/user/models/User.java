@@ -73,7 +73,7 @@ public class User implements Serializable, UserDetails, OAuth2User {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<Authority> authorities = new ArrayList<>();
-        if (roles != null)
+        if (roles != null && !roles.isEmpty())
             for (Role role : roles) {
                 authorities.addAll(role.getAuthorities());
             }
