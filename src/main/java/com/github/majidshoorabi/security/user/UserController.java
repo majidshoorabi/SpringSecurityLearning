@@ -1,9 +1,15 @@
 package com.github.majidshoorabi.security.user;
 
+import com.github.majidshoorabi.security.jwt.JwtAuth;
+import com.github.majidshoorabi.security.jwt.JwtUtils;
 import com.github.majidshoorabi.security.user.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -94,7 +100,7 @@ public class UserController {
 
     @GetMapping("/setCookie")
     public String setCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("user","Majid");
+        Cookie cookie = new Cookie("user", "Majid");
         cookie.setMaxAge(60);
         response.addCookie(cookie);
         return "index";
@@ -110,7 +116,7 @@ public class UserController {
 
     @GetMapping("/setSession")
     public String setSession(HttpSession session) {
-        session.setAttribute("user","Majid");
+        session.setAttribute("user", "Majid");
         return "index";
     }
 
@@ -118,5 +124,27 @@ public class UserController {
     public @ResponseBody
     Principal setSession(Principal principal) {
         return principal;
+    }
+
+
+    //**************************************************************************
+
+    @Autowired
+    private AuthenticationManager manager;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+
+    @PostMapping("/jwt/login")
+    public @ResponseBody
+    ResponseEntity<?> jwtLogin(@RequestBody JwtAuth jwtAuth, HttpServletResponse response) {
+        try {
+            manager.authenticate(new UsernamePasswordAuthenticationToken(jwtAuth.getUsername(), jwtAuth.getPassword()));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        response.addHeader("Authorization", jwtUtils.generateToken(jwtAuth.getUsername()));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
