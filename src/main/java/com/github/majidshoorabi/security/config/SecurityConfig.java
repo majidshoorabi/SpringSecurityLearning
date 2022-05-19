@@ -36,8 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/error", "/h2", "/info").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .oauth2Login()
+                .and().formLogin().loginPage("/login").usernameParameter("email").successHandler(new SuccessLoginHandler())
+                .and().oauth2Login()
+                .loginPage("/oauthLogin")                           // set a new address for oauth login then doesn't redirect to oauthLogin page when you got to login page, you can open this page or not
                 .and().rememberMe()
                 .and().exceptionHandling().accessDeniedPage("/error")
                 .and().logout().deleteCookies("remember");
