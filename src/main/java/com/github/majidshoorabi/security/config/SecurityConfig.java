@@ -1,5 +1,6 @@
 package com.github.majidshoorabi.security.config;
 
+import com.github.majidshoorabi.security.jwt.JwtFilter;
 import com.github.majidshoorabi.security.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,8 +10,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.sql.DataSource;
 
@@ -34,6 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2UserService oAuth2UserService;
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -51,7 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().successHandler(new SuccessLoginHandler())      // set handler for login through Oauth2 - can have new handler or use from handler's login form
                 .and().rememberMe()
                 .and().exceptionHandling().accessDeniedPage("/error")
-                .and().logout().deleteCookies("remember");
+                .and().logout().deleteCookies("remember")
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         // for display h2 console you should add this two lines
         http.headers().frameOptions().disable();
